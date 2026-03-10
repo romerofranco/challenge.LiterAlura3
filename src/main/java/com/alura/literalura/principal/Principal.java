@@ -107,16 +107,16 @@ public class Principal {
 
     private void listarLibrosPorIdioma() {
         System.out.println("""
-                Ingrese el idioma para buscar los libros:
-                es - Español
-                en - Inglés
-                fr - Francés
-                pt - Portugués
-                """);
+            Ingrese el idioma para buscar los libros:
+            es - Español
+            en - Inglés
+            fr - Francés
+            pt - Portugués
+            """);
         String idioma = teclado.nextLine();
         List<Libro> libros = repositorio.findAll();
         libros.stream()
-                .filter(l -> l.getIdiomas().contains(idioma))
+                .filter(l -> l.getIdioma().equals(idioma))
                 .forEach(System.out::println);
     }
 }

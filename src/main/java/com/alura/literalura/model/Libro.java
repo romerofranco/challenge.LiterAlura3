@@ -14,9 +14,7 @@ public class Libro {
     @Column(unique = true)
     private String titulo;
     private Integer numeroDescargas;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> idiomas;
+    private String idioma;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -31,7 +29,7 @@ public class Libro {
     public Libro(DatosLibro datosLibro) {
         this.titulo = datosLibro.titulo();
         this.numeroDescargas = datosLibro.numeroDescargas();
-        this.idiomas = datosLibro.idiomas();
+        this.idioma = datosLibro.idiomas().get(0); // solo el primer idioma
     }
 
     public Long getId() { return id; }
@@ -39,8 +37,8 @@ public class Libro {
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public Integer getNumeroDescargas() { return numeroDescargas; }
     public void setNumeroDescargas(Integer numeroDescargas) { this.numeroDescargas = numeroDescargas; }
-    public List<String> getIdiomas() { return idiomas; }
-    public void setIdiomas(List<String> idiomas) { this.idiomas = idiomas; }
+    public String getIdioma() { return idioma; }
+    public void setIdioma(String idioma) { this.idioma = idioma; }
     public List<Autor> getAutores() { return autores; }
     public void setAutores(List<Autor> autores) { this.autores = autores; }
 
@@ -48,7 +46,7 @@ public class Libro {
     public String toString() {
         return "Título: " + titulo +
                 "\nAutores: " + autores +
-                "\nIdiomas: " + idiomas +
+                "\nIdioma: " + idioma +
                 "\nNúmero de descargas: " + numeroDescargas;
     }
 }
