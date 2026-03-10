@@ -1,6 +1,7 @@
 package com.alura.literalura.principal;
 
 import com.alura.literalura.model.*;
+import com.alura.literalura.repository.AutorRepository;
 import com.alura.literalura.repository.LibroRepository;
 import com.alura.literalura.service.ConsumoAPI;
 import com.alura.literalura.service.ConvierteDatos;
@@ -15,10 +16,12 @@ public class Principal {
     private ConsumoAPI consumoApi = new ConsumoAPI();
     private ConvierteDatos conversor = new ConvierteDatos();
     private LibroRepository repositorio;
+    private AutorRepository autorRepositorio;
     private static final String URL_BASE = "https://gutendex.com/books/?search=";
 
-    public Principal(LibroRepository repositorio) {
+    public Principal(LibroRepository repositorio, AutorRepository autorRepositorio) {
         this.repositorio = repositorio;
+        this.autorRepositorio = autorRepositorio;
     }
 
     public void mostrarMenu() {
@@ -91,15 +94,19 @@ public class Principal {
 
     private void listarAutoresVivosPorAnio() {
         System.out.println("Ingrese el año que desea buscar:");
-        int anio = teclado.nextInt();
-        teclado.nextLine();
-        List<Libro> libros = repositorio.findAll();
-        libros.stream()
-                .map(Libro::getAutor)
-                .distinct()
-                .filter(a -> a.getAnioNacimiento() != null && a.getAnioNacimiento() <= anio
-                        && (a.getAnioFallecimiento() == null || a.getAnioFallecimiento() >= anio))
-                .forEach(System.out::println);
+        try {
+            int anio = teclado.nextInt();
+            teclado.nextLine();
+            List<Autor> autores = autorRepositorio.findAutoresVivosPorAnio(anio);
+            if (autores.isEmpty()) {
+                System.out.println("No se encontraron autores vivos en ese año.");
+            } else {
+                autores.forEach(System.out::println);
+            }
+        } catch (Exception e) {
+            System.out.println("Año inválido, ingrese un número.");
+            teclado.nextLine();
+        }
     }
 
     private void listarLibrosPorIdioma() {
