@@ -16,20 +16,17 @@ public class Libro {
     private Integer numeroDescargas;
     private String idioma;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "libro_autor",
-            joinColumns = @JoinColumn(name = "libro_id"),
-            inverseJoinColumns = @JoinColumn(name = "autor_id")
-    )
-    private List<Autor> autores;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
 
     public Libro() {}
 
     public Libro(DatosLibro datosLibro) {
         this.titulo = datosLibro.titulo();
         this.numeroDescargas = datosLibro.numeroDescargas();
-        this.idioma = datosLibro.idiomas().get(0); // solo el primer idioma
+        this.idioma = datosLibro.idiomas().get(0);
+        this.autor = new Autor(datosLibro.autores().get(0));
     }
 
     public Long getId() { return id; }
@@ -39,13 +36,15 @@ public class Libro {
     public void setNumeroDescargas(Integer numeroDescargas) { this.numeroDescargas = numeroDescargas; }
     public String getIdioma() { return idioma; }
     public void setIdioma(String idioma) { this.idioma = idioma; }
-    public List<Autor> getAutores() { return autores; }
-    public void setAutores(List<Autor> autores) { this.autores = autores; }
+    public Autor getAutor() { return autor; }
+    public void setAutor(Autor autor) { this.autor = autor; }
 
     @Override
     public String toString() {
         return "Título: " + titulo +
-                "\nAutores: " + autores +
+                "\nAutor: " + autor.getNombre() +
+                "\nAño de nacimiento: " + autor.getAnioNacimiento() +
+                "\nAño de fallecimiento: " + autor.getAnioFallecimiento() +
                 "\nIdioma: " + idioma +
                 "\nNúmero de descargas: " + numeroDescargas;
     }

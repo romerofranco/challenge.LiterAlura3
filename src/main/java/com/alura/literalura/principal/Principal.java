@@ -71,10 +71,7 @@ public class Principal {
         }
 
         Libro libro = new Libro(datosLibro);
-        List<Autor> autores = datosLibro.autores().stream()
-                .map(Autor::new)
-                .toList();
-        libro.setAutores(autores);
+        libro.setAutor(new Autor(datosLibro.autores().get(0)));
         repositorio.save(libro);
         System.out.println(libro);
     }
@@ -87,7 +84,7 @@ public class Principal {
     private void listarAutoresRegistrados() {
         List<Libro> libros = repositorio.findAll();
         libros.stream()
-                .flatMap(l -> l.getAutores().stream())
+                .map(Libro::getAutor)
                 .distinct()
                 .forEach(System.out::println);
     }
@@ -98,7 +95,7 @@ public class Principal {
         teclado.nextLine();
         List<Libro> libros = repositorio.findAll();
         libros.stream()
-                .flatMap(l -> l.getAutores().stream())
+                .map(Libro::getAutor)
                 .distinct()
                 .filter(a -> a.getAnioNacimiento() != null && a.getAnioNacimiento() <= anio
                         && (a.getAnioFallecimiento() == null || a.getAnioFallecimiento() >= anio))
