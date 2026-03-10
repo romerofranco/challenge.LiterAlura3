@@ -20,4 +20,4 @@ public class ConsumoAPI {
         }
         return response.body();
     }
-}git
+}
