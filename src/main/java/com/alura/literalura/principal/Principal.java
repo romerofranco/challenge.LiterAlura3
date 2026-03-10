@@ -111,9 +111,12 @@ public class Principal {
             pt - Portugués
             """);
         String idioma = teclado.nextLine();
-        List<Libro> libros = repositorio.findAll();
-        libros.stream()
-                .filter(l -> l.getIdioma().equals(idioma))
-                .forEach(System.out::println);
+        List<Libro> libros = repositorio.findByIdioma(idioma);
+        if (libros.isEmpty()) {
+            System.out.println("No se encontraron libros en ese idioma.");
+        } else {
+            System.out.println("Cantidad de libros en " + idioma + ": " + libros.size());
+            libros.forEach(System.out::println);
+        }
     }
 }
