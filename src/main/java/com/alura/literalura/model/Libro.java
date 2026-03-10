@@ -18,7 +18,7 @@ public class Libro {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> idiomas;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "libro_autor",
             joinColumns = @JoinColumn(name = "libro_id"),
